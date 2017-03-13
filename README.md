@@ -39,7 +39,7 @@ Here is a visualization of frequency of examples per label in each of the
 datasets: train, validation, dev, test. Visually make sure all the datasets have similar distribution of labels.
 
 
-![png](output_10_1.png)
+![png](submission/output_10_1.png)
 
 
 
@@ -47,13 +47,13 @@ Random images visualized from training set, overlayed are the
 labels:
 
 
-![png](output_15_1.png)
+![png](submission/output_15_1.png)
 
 
 Random images visualized from testing set, overlayed are the
 labels:
 
-![png](output_16_1.png)
+![png](submission/output_16_1.png)
 
 
 ----
@@ -70,13 +70,13 @@ from training set:
 
 
 
-![png](output_22_1.png)
+![png](submission/output_22_1.png)
 
 
 same preprocessing applied to test images:
 
 
-![png](output_23_1.png)
+![png](submission/output_23_1.png)
 
 
 Finally the images in training data are shuffled before
@@ -149,7 +149,7 @@ convolution layer 1 visualization from test data:
 
 
 
-![png](output_35_1.png)
+![png](submission/output_35_1.png)
 
 ---
 
@@ -157,7 +157,7 @@ convolution layer 2 visualization from test data
 
 
 
-![png](output_36_1.png)
+![png](submission/output_36_1.png)
 
 
 ---
@@ -168,33 +168,33 @@ convolution layer 2 visualization from test data
 
 5 new German traffic signs images downloaded from the internet:
 
-![png](output_41_0.png)
+![png](submission/output_41_0.png)
 
 After applying same preprocessing to the new images:
 
 
-![png](output_44_0.png)
+![png](submission/output_44_0.png)
 
 
 Top 5 predictions on new images:
 
-![png](output_46_0.png)
+![png](submission/output_46_0.png)
 
 
 
-![png](output_46_1.png)
+![png](submission/output_46_1.png)
 
 
 
-![png](output_46_2.png)
+![png](submission/output_46_2.png)
 
 
 
-![png](output_46_3.png)
+![png](submission/output_46_3.png)
 
 
 
-![png](output_46_4.png)
+![png](submission/output_46_4.png)
 
 
 ### Analyze Performance
@@ -214,11 +214,11 @@ Top 5 predictions on new images:
 
 
 
-![png](output_53_1.png)
+![png](submission/output_53_1.png)
 
 
 
-![png](output_53_2.png)
+![png](submission/output_53_2.png)
 
 
 
@@ -227,11 +227,11 @@ Top 5 predictions on new images:
 
 
 
-![png](output_54_1.png)
+![png](submission/output_54_1.png)
 
 
 
-![png](output_54_2.png)
+![png](submission/output_54_2.png)
 
 
 Above visualizations show that the activations have learnt relevant features from images.
