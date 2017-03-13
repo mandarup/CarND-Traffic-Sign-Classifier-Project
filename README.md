@@ -1,54 +1,241 @@
-## Project: Build a Traffic Sign Recognition Program
-[![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
 
-Overview
+# Self-Driving Car Engineer Nanodegree
+
+## Deep Learning
+
+
+
+
 ---
-In this project, you will use what you've learned about deep neural networks and convolutional neural networks to classify traffic signs. You will train and validate a model so it can classify traffic sign images using the [German Traffic Sign Dataset](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset). After the model is trained, you will then try out your model on images of German traffic signs that you find on the web.
 
-We have included an Ipython notebook that contains further instructions 
-and starter code. Be sure to download the [Ipython notebook](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb). 
+## Step 1: Dataset Summary & Exploration
 
-We also want you to create a detailed writeup of the project. Check out the [writeup template](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project/blob/master/writeup_template.md) for this project and use it as a starting point for creating your own writeup. The writeup can be either a markdown file or a pdf document.
+The pickled data is a dictionary with 4 key/value pairs:
 
-To meet specifications, the project will require submitting three files: 
-* the Ipython notebook with the code
-* the code exported as an html file
-* a writeup report either as a markdown or pdf file 
+- `'features'` is a 4D array containing raw pixel data of the traffic sign images, (num examples, width, height, channels).
+- `'labels'` is a 1D array containing the label/class id of the traffic sign. The file `signnames.csv` contains id -> name mappings for each id.
+- `'sizes'` is a list containing tuples, (width, height) representing the original width and height the image.
+- `'coords'` is a list containing tuples, (x1, y1, x2, y2) representing coordinates of a bounding box around the sign in the image. **THESE COORDINATES ASSUME THE ORIGINAL IMAGE. THE PICKLED DATA CONTAINS RESIZED VERSIONS (32 by 32) OF THESE IMAGES**
 
-Creating a Great Writeup
----
-A great writeup should include the [rubric points](https://review.udacity.com/#!/rubrics/481/view) as well as your description of how you addressed each point.  You should include a detailed description of the code used in each step (with line-number references and code snippets where necessary), and links to other supporting documents or external references.  You should include images in your writeup to demonstrate how your code works with examples.  
 
-All that said, please be concise!  We're not looking for you to write a book here, just a brief description of how you passed each rubric point, and references to the relevant code :). 
 
-You're not required to use markdown for your writeup.  If you use another method please just submit a pdf of your writeup.
+### Basic Summary of the Data Set
 
-The Project
----
-The goals / steps of this project are the following:
-* Load the data set
-* Explore, summarize and visualize the data set
-* Design, train and test a model architecture
-* Use the model to make predictions on new images
-* Analyze the softmax probabilities of the new images
-* Summarize the results with a written report
 
-### Dependencies
-This lab requires:
 
-* [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit)
+    Number of training examples = 39209
+    Number of testing examples = 12630
+    Image data shape = (32, 32, 3)
+    Number of classes = 43
 
-The lab enviroment can be created with CarND Term1 Starter Kit. Click [here](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) for the details.
 
-### Dataset and Repository
+Next, split the data train data, retaining 60% for training. Split leftout 40%
+data into 50%:50%  validation and development sets. This would help reduce
+overfitting to validation set. Here are the sizes of datasets after split:
 
-1. Download the data set. The classroom has a link to the data set in the "Project Instructions" content. This is a pickled dataset in which we've already resized the images to 32x32. It contains a training, validation and test set.
-2. Clone the project, which contains the Ipython notebook and the writeup template.
-```sh
-git clone https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project
-cd CarND-Traffic-Sign-Classifier-Project
-jupyter notebook Traffic_Sign_Classifier.ipynb
+
+    train shape (23525, 32, 32, 3)
+    dev shape (7842, 32, 32, 3)
+    valid shape (7842, 32, 32, 3)
+
+
+Here is a visualization of frequency of examples per label in each of the
+datasets: train, validation, dev, test. Visually make sure all the datasets have similar distribution of labels.
+
+
+![png](output_10_1.png)
+
+
+
+Random images visualized from training set, overlayed are the
+labels:
+
+
+![png](output_15_1.png)
+
+
+Random images visualized from testing set, overlayed are the
+labels:
+
+![png](output_16_1.png)
+
+
+----
+
+## Step 2: Model
+
+
+
+### Pre-process the Data Set
+
+Images are preprocessed with histogram equalization and
+min max scaling. Here are randomly chosen preprocessed images
+from training set:
+
+
+
+![png](output_22_1.png)
+
+
+same preprocessing applied to test images:
+
+
+![png](output_23_1.png)
+
+
+Finally the images in training data are shuffled before
+starting the training.
+
+### Model Architecture
+
+
+```python
+EPOCHS = 10000
+BATCH_SIZE = 256
+N_CLASSES = 43
+COLOR_CHANNELS = 3
+
+
 ```
 
-### Requirements for Submission
-Follow the instructions in the `Traffic_Sign_Classifier.ipynb` notebook and write the project report using the writeup template as a guide, `writeup_template.md`. Submit the project code and writeup document.
+## Model Architecture
+
+model architecture is based on LeNet-5.
+
+**Layer 1: Convolutional.**
+apply convolution with 5x5 kernel, 'Valid' padding  and stride of 2 with output shape --> (28, 28, 32)
+
+**Activation.**
+ReLU.
+
+**Pooling.** apply max pooling with 'Valid' padding and stride of 2,
+output shape --> 14x14x32.
+
+**Layer 2: Convolutional.**
+Apply convolution with 5x5 kernel, 'Valid' padding and stride of 2 with output shape --> (10, 10, 64)
+
+**Activation.** ReLU.
+
+**Pooling.** Max pooling with 'Valid' padding and stride of 2,
+output shape --> (5, 5, 64).
+
+**Flatten.** Flatten the output shape of the final pooling layer such that it's 1D instead of 3D.
+output shape --> 5*5*64 = 1600
+
+**Layer 3: Fully Connected.**  maps 1600 inputs to 512 outputs. Dropout probability of 0.5.
+
+**Activation.** ReLU.
+
+**Layer 4: Fully Connected.** maps 512 inputs to 512 outputs. Dropout probability of 0.5.
+
+**Activation.** ReLU.
+
+**Layer 5: Fully Connected (Logits).** output logits of shape 43 corresponding to 43
+traffic signs.
+
+The code for calculating the accuracy of the model is located in the ninth cell of the Ipython notebook.
+
+
+After 62 epochs, training accuracy of 0.999, validation accuracy of 0.991, with AvgEpochTime 21.95 s, and  TotalTime 22.68 min, is achieved. The model is trained with NVIDIA 740M gpu.
+
+
+On additional held out data, previously referred to as development set, an accuracy of 0.989 is achieved.
+At this point, with enough validation confidence, evaluate model on test images.
+
+On the test set, an accuracy of  0.948 is achieved.
+
+
+here are some visualizations of activations for convolutional layers:
+
+---
+
+convolution layer 1 visualization from test data:
+
+
+
+![png](output_35_1.png)
+
+---
+
+convolution layer 2 visualization from test data
+
+
+
+![png](output_36_1.png)
+
+
+---
+
+## Step 3: Test a Model on New Images
+
+### Load and Output the Images
+
+5 new German traffic signs images downloaded from the internet:
+
+![png](output_41_0.png)
+
+After applying same preprocessing to the new images:
+
+
+![png](output_44_0.png)
+
+
+Top 5 predictions on new images:
+
+![png](output_46_0.png)
+
+
+
+![png](output_46_1.png)
+
+
+
+![png](output_46_2.png)
+
+
+
+![png](output_46_3.png)
+
+
+
+![png](output_46_4.png)
+
+
+### Analyze Performance
+
+0% accuracy achieved on new images.
+
+---
+
+## Step 4: Visualize the Neural Network's State with Test Images
+
+
+
+### Visualize the activations of convnet layers on new images
+
+
+    stop.jpeg
+
+
+
+![png](output_53_1.png)
+
+
+
+![png](output_53_2.png)
+
+
+
+
+    speed-limit-60.jpeg
+
+
+
+![png](output_54_1.png)
+
+
+
+![png](output_54_2.png)
+
+
+Above visualizations show that the activations have learnt relevant features from images.
