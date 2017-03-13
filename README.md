@@ -1,14 +1,10 @@
 
-# Self-Driving Car Engineer Nanodegree
 
-## Deep Learning
-
-
-
+Please refer to ``.submissions/`` directory for a jupyter notebook with the final model.
 
 ---
 
-## Step 1: Dataset Summary & Exploration
+## Step 1: German Traffic Signs Dataset Summary & Exploration
 
 The pickled data is a dictionary with 4 key/value pairs:
 
