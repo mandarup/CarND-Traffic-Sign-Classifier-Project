@@ -89,15 +89,6 @@ starting the training.
 ### Model Architecture
 
 
-```python
-EPOCHS = 10000
-BATCH_SIZE = 256
-N_CLASSES = 43
-COLOR_CHANNELS = 3
-
-
-```
-
 ## Model Architecture
 
 model architecture is based on LeNet-5.
@@ -133,7 +124,44 @@ output shape --> 5*5*64 = 1600
 **Layer 5: Fully Connected (Logits).** output logits of shape 43 corresponding to 43
 traffic signs.
 
-The code for calculating the accuracy of the model is located in the ninth cell of the Ipython notebook.
+The code for calculating the accuracy of the model is located in the 40th cell of the Ipython notebook.
+
+
+Model training is begun with following initial values of parameters:
+- all the tensorflow convnet weights are initialized with truncated normal
+distribution with mean of ``0.`` and stddev of ``1.``
+
+- dropout probability of ``0.5`` is used only on fully connected layers
+
+- EPOCHS = ``10000``
+
+    Maximum number of epochs to train.
+
+- BATCH_SIZE = ``256``
+
+  maximum number of examples in training batch.
+
+- learning rate = ``0.001``
+
+  During training, learning rate is updated by monitoring training performance,
+  using following logic (pseudocode):
+
+      if (mean(train_accuracy_past_n_epochs) >= current_train_accuracy  
+              or (best_accuracy - train_accuracy > .001)):
+          learning_rate = learning_rate * .9
+
+  This logic is meant to reduce learning rate if training accuracy
+  stops improving or worsens while allowing some tolerance.
+
+
+- Early stopping
+  In addition, if validation accuracy exceeds target accuracy, training stops.
+  Training also stops if validation accuracy worsens significantly (set to 1%)
+  compared to best validation accuracy.
+
+
+
+
 
 
 After 62 epochs, training accuracy of 0.999, validation accuracy of 0.991, with AvgEpochTime 21.95 s, and  TotalTime 22.68 min, is achieved. The model is trained with NVIDIA 740M gpu.
@@ -204,6 +232,19 @@ Top 5 predictions on new images:
 ### Analyze Performance
 
 0% accuracy achieved on new images.
+
+A few characteristics that might be affecting test performance are:
+
+- It is possible that resizing images from the Internet
+skews the traffic signs in ways that are not seen by the
+model.
+
+- drastically different image background contrast.
+
+- angle of traffic signs
+
+- these images also look way more jittery than the training
+images.
 
 ---
 
