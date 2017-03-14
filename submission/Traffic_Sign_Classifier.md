@@ -231,9 +231,10 @@ Top 5 predictions on new images:
 
 ### Analyze Performance
 
-0% accuracy achieved on new images.
+The model failed to guess all 5 new traffic signs. In case of
+one traffic sign - "speed-limit-30" - the prediction corresponding to second highest probability is correct. This performance does not compare well with the test set performance of 94%.
 
-A few characteristics that might be affecting test performance are:
+A few characteristics that might be affecting new image prediction performance are:
 
 - It is possible that resizing images from the Internet
 skews the traffic signs in ways that are not seen by the
